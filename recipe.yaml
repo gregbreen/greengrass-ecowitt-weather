@@ -1,0 +1,38 @@
+RecipeFormatVersion: '2020-01-25'
+ComponentName: COMPONENT_NAME
+ComponentVersion: COMPONENT_VERSION
+ComponentDescription: Ecowitt weather data to AWS IoT Core
+ComponentPublisher: AUTHOR
+ComponentConfiguration:
+  DefaultConfiguration:
+    gatewayAddress: 0.0.0.0
+    accessControl:
+      aws.greengrass.ipc.mqttproxy:
+        gregbreen.EcowittWeather:mqttproxy:1:
+          policyDescription: Allows access to publish to relevant topics
+          operations:
+          - "aws.greengrass#PublishToIoTCore"
+          resources:
+          - "ecowitt/livedata"
+Manifests:
+- Platform:
+    os: linux
+  Lifecycle:
+    Install:
+      Script: |-
+        python3 -m venv venv
+        . venv/bin/activate
+        echo Upgrading pip
+        pip install pip --upgrade
+        pip3 install awsiotsdk
+    Run:
+      RequiresPrivilege: true
+      Script: |-
+        . venv/bin/activate
+        python3 -u {artifacts:decompressedPath}/greengrass-ecowitt-weather/main.py
+  Artifacts:
+  - Uri: s3://BUCKET_NAME/COMPONENT_NAME/COMPONENT_VERSION/greengrass-ecowitt-weather.zip
+    Unarchive: ZIP
+    Permission:
+      Read: ALL
+Lifecycle: {}

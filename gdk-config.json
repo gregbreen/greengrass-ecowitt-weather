@@ -1,0 +1,16 @@
+{
+    "component": {
+      "gregbreen.EcowittWeather": {
+        "author": "Greg Breen",
+        "version": "1.0.0",
+        "build": {
+          "build_system": "zip"
+      },
+        "publish": {
+          "bucket": "greengrass-ecowitt-weather",
+          "region": "us-east-1"
+        }
+      }
+    },
+    "gdk_version": "1.0.0"
+  }
