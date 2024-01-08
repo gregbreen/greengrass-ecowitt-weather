@@ -13,7 +13,7 @@ ComponentConfiguration:
           operations:
           - "aws.greengrass#PublishToIoTCore"
           resources:
-          - "ecowitt/livedata"
+          - "ecowitt/{iot:thingName}/livedata"
 Manifests:
 - Platform:
     os: linux

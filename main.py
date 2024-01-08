@@ -3,6 +3,7 @@ AWS IoT Greengrass component for publishing Ecowitt weather data to AWS IoT Core
 """
 
 import json
+import os
 import socket
 import time
 import traceback
@@ -11,7 +12,7 @@ from awsiot.greengrasscoreipc.model import QOS
 
 PORT = 45000
 CMD_LIVEDATA = b'\xff\xff\x27\x03\x2a'
-TOPIC = 'ecowitt/livedata'
+TOPIC = f'ecowitt/{os.environ.get("AWS_IOT_THING_NAME")}/livedata'
 
 # Taken from EcoWitt Data Exchange TCP Protocol document
 # Suitable for GW1000, 1100, 1900, 2000, 2001, 2680, 2650
@@ -60,7 +61,7 @@ LIVE_DATA_ITEMS = {
 
 def parse_live_data(data):
     """ Parse live data from EcoWitt device """
-    msg = {}
+    msg = { 'Timestamp': round(time.time()) }
     payload_length = (data[3] * 256) + data[4]
     checksum = sum(data[2:-1]) & 0xFF
 
